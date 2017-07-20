@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1068352704539",
+    "firebase_url": "https://formz-20e7a.firebaseio.com",
+    "project_id": "formz-20e7a",
+    "storage_bucket": "formz-20e7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068352704539:android:b14e1bce93d1cec5",
+        "android_client_info": {
+          "package_name": "com.fireabaseapp.wanderson_jackson.todoz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068352704539-j4rcg8jqg4eaqj70eia5rhcv77qgfmqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fireabaseapp.wanderson_jackson.todoz",
+            "certificate_hash": "5abe2eb3b6a5050d6ed46f3537a0b4af16b4a2ae"
+          }
+        },
+        {
+          "client_id": "1068352704539-o3kpc92rhggj7tigljkm5v7qimhl2o7h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-YhK1AlLq0RRWrG3k_UwPgaDB9fC1_VE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068352704539-o3kpc92rhggj7tigljkm5v7qimhl2o7h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
