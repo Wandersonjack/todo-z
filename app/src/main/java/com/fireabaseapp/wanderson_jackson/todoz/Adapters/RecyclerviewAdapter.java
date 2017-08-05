@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fireabaseapp.wanderson_jackson.todoz.Interfaces.RecyclerViewClickListener;
 import com.fireabaseapp.wanderson_jackson.todoz.Objeto.TaskObject;
 import com.fireabaseapp.wanderson_jackson.todoz.R;
 import com.fireabaseapp.wanderson_jackson.todoz.listener.ItemListener;
@@ -27,10 +28,11 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     private List<TaskObject> taskObjectList;
     private LayoutInflater layoutInflater;
     private ItemListener listener;                                                            // instancia do listener criado como interface para ser utilizado aqui nesta classe adapter
+    private RecyclerViewClickListener recyclerViewClickListener;
 
     public RecyclerviewAdapter(List<TaskObject> taskObjectList, ItemListener listener, Context context) {//todos o parametros adicionados no construtor inclusive o listener
         this.taskObjectList = taskObjectList;
-        layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listener = listener;                                                                   //item construction
     }
 
@@ -43,15 +45,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-            holder.txtObject.setText(taskObjectList.get(position).getTask());                   //setando no holder no texto baseado na posicao
+        holder.txtObject.setText(taskObjectList.get(position).getTask());                   //setando no holder no texto baseado na posicao
 
 
-
-            //acao executada apartir de
-            holder.cardList.setOnLongClickListener(new View.OnLongClickListener() {                 //baseado no click longo do item, vai executar de abrir menu d econtexto
+        //acao executada apartir de
+        holder.cardList.setOnLongClickListener(new View.OnLongClickListener() {                 //baseado no click longo do item, vai executar de abrir menu d econtexto
             @Override
             public boolean onLongClick(final View v) {
-                final TaskObject task  = taskObjectList.get(position);                              //pega a posicao do task na lista de objetos
+                final TaskObject task = taskObjectList.get(position);                              //pega a posicao do task na lista de objetos
                 //System.out.print("item da lista: " + p);
                 //opcao utilizada no menu de contexto
                 final CharSequence[] items = {"Editar", "Excluir"};
@@ -64,14 +65,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
                 builder.setItems(items, new DialogInterface.OnClickListener() {                     //set o item para quando for selecionado via position chamar sus respectiva acao
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        switch (item){
+                        switch (item) {
                             case 0:
                                 listener.onOpenDialog(task);//metodo para chamada de dialog teste, o correto seria abrir modal com dados preenchidos
-                                Toast.makeText(v.getContext(), "Editou:  "+task.getTask(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(v.getContext(), "Editou:  " + task.getTask(), Toast.LENGTH_SHORT).show();
                                 break;
                             case 1:
 
-                                Toast.makeText(v.getContext(), "Excluiu "+task.getTask(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(v.getContext(), "Excluiu " + task.getTask(), Toast.LENGTH_SHORT).show();
                                 listener.onDelete(task);
                                 //preparar metodo que notifica a exclusao
                                 break;
@@ -94,8 +95,9 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
         return taskObjectList.size();                                                               //pegando o tanho da lista de objeto
     }
 
-
-    class MyViewHolder extends RecyclerView.ViewHolder {                                            //classe intenar que serve para pegar itens da view
+    /*Implement clicks in this class, then verify if instance of recyclerview is null or not and
+    use methods of instance*/
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {                                            //classe intenar que serve para pegar itens da view
 
         private TextView txtObject;
         private CardView cardList;
@@ -106,9 +108,28 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
             txtObject = (TextView) itemView.findViewById(R.id.task_list_item);
             cardList = (CardView) itemView.findViewById(R.id.card_list);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (recyclerViewClickListener != null) {
+                recyclerViewClickListener.OnClickListener(v, getAdapterPosition());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (recyclerViewClickListener != null) {
+                recyclerViewClickListener.OnLongClickListener(v, getAdapterPosition());
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
-
+    public void setRecyclerViewClickListener(RecyclerViewClickListener r) {
+        this.recyclerViewClickListener = r;
+    }
 
 
 }

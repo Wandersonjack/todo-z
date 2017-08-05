@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.fireabaseapp.wanderson_jackson.todoz.Adapters.RecyclerviewAdapter;
+import com.fireabaseapp.wanderson_jackson.todoz.Interfaces.RecyclerViewClickListener;
 import com.fireabaseapp.wanderson_jackson.todoz.Objeto.TaskObject;
 import com.fireabaseapp.wanderson_jackson.todoz.listener.ItemListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TodoListActivity extends AppCompatActivity implements View.OnClickListener , ItemListener {
+public class TodoListActivity extends AppCompatActivity implements View.OnClickListener, ItemListener, RecyclerViewClickListener {
     private Dialog dialogAddTarefa;
     private EditText edTarefa;
     private RecyclerView recyclerView;
@@ -88,11 +89,11 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
         database = FirebaseDatabase.getInstance();
 
 
-        recyclerView  = (RecyclerView) findViewById(R.id.recycler_view_todo);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_todo);
 
         taskObjectList = new ArrayList<>();
 
-        linearLayoutManager = new  LinearLayoutManager(this);
+        linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setHasFixedSize(true);
@@ -100,7 +101,11 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
 
         final RecyclerviewAdapter adapter;
 
-        adapter = new RecyclerviewAdapter(taskObjectList,this, this);
+        adapter = new RecyclerviewAdapter(taskObjectList, this, this);
+
+        //SetClickListener do adapter
+        adapter.setRecyclerViewClickListener(this);
+
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -166,7 +171,7 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
         return super.onOptionsItemSelected(item);
     }
 
-    public void adicionarTarefaDialog(){
+    public void adicionarTarefaDialog() {
         dialogAddTarefa = new Dialog(this);
         dialogAddTarefa.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogAddTarefa.setContentView(R.layout.dialog_todo_layout);
@@ -179,7 +184,7 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_adicionar_tarefa_dialog:
                 adiconarTarefa();
                 dialogAddTarefa.dismiss();
@@ -194,12 +199,12 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     //metodo para adicionar tarefas
-    public void adiconarTarefa(){
+    public void adiconarTarefa() {
         String tarefa = edTarefa.getText().toString();
-        if (TextUtils.isEmpty(tarefa)){
+        if (TextUtils.isEmpty(tarefa)) {
             Toast.makeText(getApplicationContext(), "voce nao adicionou nada!", Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(getApplicationContext(),getString(R.string.texto_teste), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.texto_teste), Toast.LENGTH_LONG).show();
             reference = database.getReference().child("TaskObject").push();
             TaskObject taskObject = new TaskObject();
             taskObject.setKey(reference.getKey());
@@ -210,12 +215,12 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     //metodo para adicionar tarefas
-    public void editarTarefa(TaskObject object){
+    public void editarTarefa(TaskObject object) {
         String tarefa = object.getKey();
-        if (TextUtils.isEmpty(tarefa)){
+        if (TextUtils.isEmpty(tarefa)) {
             Toast.makeText(getApplicationContext(), "voce nao adicionou nada!", Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(getApplicationContext(),getString(R.string.texto_teste), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.texto_teste), Toast.LENGTH_LONG).show();
             reference = database.getReference().child("TaskObject").push();
             TaskObject taskObject = new TaskObject();
             taskObject.setKey(reference.getKey());
@@ -257,7 +262,7 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
         //reference.child("key").removeValue();
         Toast.makeText(getApplicationContext(), "TASK: " + object.getTask(), Toast.LENGTH_SHORT).show();
         //deleteRef.child("key").removeValue();
-       // taskObjectList.remove(taskObjectList);//remove do recyclerview
+        // taskObjectList.remove(taskObjectList);//remove do recyclerview
         //notify();
     }
 
@@ -267,4 +272,13 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    @Override
+    public void OnClickListener(View view, int position) {
+        Log.i("LOGAPP", "OnClickListener: " + position);
+    }
+
+    @Override
+    public void OnLongClickListener(View view, int position) {
+        Log.i("LOGAPP", "OnLongClickListener: " + position);
+    }
 }
