@@ -1,10 +1,12 @@
 package com.fireabaseapp.wanderson_jackson.todoz;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -101,7 +103,7 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
 
         final RecyclerviewAdapter adapter;
 
-        adapter = new RecyclerviewAdapter(taskObjectList, this, this);
+        adapter = new RecyclerviewAdapter(taskObjectList, this);
 
         //SetClickListener do adapter
         adapter.setRecyclerViewClickListener(this);
@@ -278,7 +280,43 @@ public class TodoListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void OnLongClickListener(View view, int position) {
+    public void OnLongClickListener(final View view, int position) {
         Log.i("LOGAPP", "OnLongClickListener: " + position);
+
+        final TaskObject task = taskObjectList.get(position);                              //pega a posicao do task na lista de objetos
+        //System.out.print("item da lista: " + p);
+        //opcao utilizada no menu de contexto
+        final CharSequence[] items = {"Editar", "Excluir"};
+
+        //criacao do menu de contexto
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+        builder.setTitle(R.string.selecione_action);                                        //titulo do menu de contexto
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {                     //set o item para quando for selecionado via position chamar sus respectiva acao
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                switch (item) {
+                    case 0:
+
+                        //pode ser so um metodo comum, sem interface, pra editar e remover, ja tem o editarTarefa, falta o excluirTarefa
+
+                        onOpenDialog(task);//metodo para chamada de dialog teste, o correto seria abrir modal com dados preenchidos
+                        Toast.makeText(view.getContext(), "Editou:  " + task.getTask(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+
+                        Toast.makeText(view.getContext(), "Excluiu " + task.getTask(), Toast.LENGTH_SHORT).show();
+                        onDelete(task);
+                        //preparar metodo que notifica a exclusao
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+        builder.show();
+
     }
 }

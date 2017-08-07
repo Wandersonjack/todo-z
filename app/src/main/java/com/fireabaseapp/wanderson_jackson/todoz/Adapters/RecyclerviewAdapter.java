@@ -1,20 +1,15 @@
 package com.fireabaseapp.wanderson_jackson.todoz.Adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fireabaseapp.wanderson_jackson.todoz.Interfaces.RecyclerViewClickListener;
 import com.fireabaseapp.wanderson_jackson.todoz.Objeto.TaskObject;
 import com.fireabaseapp.wanderson_jackson.todoz.R;
-import com.fireabaseapp.wanderson_jackson.todoz.listener.ItemListener;
 
 import java.util.List;
 
@@ -27,13 +22,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     private List<TaskObject> taskObjectList;
     private LayoutInflater layoutInflater;
-    private ItemListener listener;                                                            // instancia do listener criado como interface para ser utilizado aqui nesta classe adapter
+    //private ItemListener listener;                                                            // instancia do listener criado como interface para ser utilizado aqui nesta classe adapter
     private RecyclerViewClickListener recyclerViewClickListener;
 
-    public RecyclerviewAdapter(List<TaskObject> taskObjectList, ItemListener listener, Context context) {//todos o parametros adicionados no construtor inclusive o listener
+    //Removi o listener daqui
+    public RecyclerviewAdapter(List<TaskObject> taskObjectList, Context context) {//todos o parametros adicionados no construtor inclusive o listener
         this.taskObjectList = taskObjectList;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.listener = listener;                                                                   //item construction
+        //this.listener = listener;                                                                   //item construction
     }
 
     @Override
@@ -48,8 +44,10 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
         holder.txtObject.setText(taskObjectList.get(position).getTask());                   //setando no holder no texto baseado na posicao
 
 
+        //Nao precisa disso aqui no adapter
+
         //acao executada apartir de
-        holder.cardList.setOnLongClickListener(new View.OnLongClickListener() {                 //baseado no click longo do item, vai executar de abrir menu d econtexto
+        /*holder.cardList.setOnLongClickListener(new View.OnLongClickListener() {                 //baseado no click longo do item, vai executar de abrir menu d econtexto
             @Override
             public boolean onLongClick(final View v) {
                 final TaskObject task = taskObjectList.get(position);                              //pega a posicao do task na lista de objetos
@@ -86,7 +84,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
                 return true;
             }
-        });
+        });*/
     }
 
 
@@ -100,13 +98,18 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {                                            //classe intenar que serve para pegar itens da view
 
         private TextView txtObject;
-        private CardView cardList;
+        //private CardView cardList;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             txtObject = (TextView) itemView.findViewById(R.id.task_list_item);
-            cardList = (CardView) itemView.findViewById(R.id.card_list);
+            //cardList = (CardView) itemView.findViewById(R.id.card_list);
+
+            //SetItemClickListener
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
         }
 
         @Override
